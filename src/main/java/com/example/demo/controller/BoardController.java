@@ -1,20 +1,20 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.BoardDTO;
+import com.example.demo.dto.Criteria;
+import com.example.demo.dto.PageDTO;
 import com.example.demo.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Date;
 
 @Controller
 @RequestMapping("/board/*")
+@SessionAttributes("member")
 public class BoardController {
 
     @Autowired
@@ -36,13 +36,13 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    @GetMapping("/list")
-    public void list(Model model) {
-        model.addAttribute("list",boardService.getBoard());
-    }
+//    @GetMapping("/list")
+//    public void list(Criteria cri, Model model) {
+//        model.addAttribute("list",boardService.getBoard(cri));
+//    }
 
     @GetMapping({"/get","/modify"})
-    public void get(@RequestParam("bno") Long bno, Model model){
+    public void get(@RequestParam("bno") Long bno,@ModelAttribute("cri")Criteria cri, Model model){
 
         BoardDTO boardDTO = boardService.get(bno);
 
@@ -50,17 +50,36 @@ public class BoardController {
     }
 
     @PostMapping("/modify")
-    public String modify(BoardDTO boardDTO){
-        boardService.modify(boardDTO);
+    public String modify(BoardDTO boardDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr){
+
+       if(boardService.modify(boardDTO)) {
+           rttr.addFlashAttribute("result", "success");
+       }
+       rttr.addAttribute("pageNum",cri.getPageNum());
+       rttr.addAttribute("amount",cri.getAmount());
         return "redirect:/board/get?bno="+ boardDTO.getBno();
     }
 
     @PostMapping("/remove")
-    public String remove(@RequestParam("bno") Long bno, RedirectAttributes rttr){
+    public String remove(@RequestParam("bno") Long bno, @ModelAttribute("cri") Criteria cri,  RedirectAttributes rttr){
         if(boardService.remove(bno)){
             rttr.addFlashAttribute("result","success");
         }
+        rttr.addAttribute("pageNum",cri.getPageNum());
+        rttr.addAttribute("amount",cri.getAmount());
         return "redirect:/board/list";
     }
+
+    @GetMapping("/list")
+    public void list(Criteria cri, Model model){
+        model.addAttribute("list", boardService.getBoard(cri));
+
+        //model.addAttribute("pageMaker", new PageDTO(cri, 123));
+        System.out.println(cri);
+        int total = boardService.getTotal(cri);
+        System.out.println(total);
+        model.addAttribute("pageMaker", new PageDTO(cri,total));
+    }
+
 
 }

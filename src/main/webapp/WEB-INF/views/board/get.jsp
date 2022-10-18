@@ -35,6 +35,10 @@
 <button data-oper="modify" class="btn" type="submit" onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'">Modify</button>
 <button data-oper="list" class="btn" onclick="location.href='/board/list'">List</button>
 
-
+<form id="operForm" action="/board/modify" method="get">
+    <input type="hidden" id="bno" name="bno" value="<c:out value="${board.bno}"/>">
+    <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
+    <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
+</form>
 </body>
 </html>

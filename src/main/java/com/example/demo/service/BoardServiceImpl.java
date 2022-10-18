@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BoardDTO;
+import com.example.demo.dto.Criteria;
 import com.example.demo.mapper.BoardMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardDTO> getBoard(){
-        return boardMapper.getBoard();
+    public List<BoardDTO> getBoard(Criteria cri){
+        return boardMapper.getListWithPaging(cri);
     }
 
 //    @Override
@@ -42,5 +43,10 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public boolean remove(Long bno){
         return boardMapper.delete(bno) == 1;
+    }
+
+    @Override
+    public int getTotal(Criteria cri){
+        return boardMapper.getTotalCount(cri);
     }
 }

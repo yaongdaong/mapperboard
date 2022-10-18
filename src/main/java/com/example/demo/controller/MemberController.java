@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@SessionAttributes("member")
 public class MemberController {
     @Autowired
     MemberService memberService;
 
+    private static final String LOGIN_MEMBER = "LOGIN_MEMBER";
     @GetMapping("/join")
     public String join(){
         System.out.println("11111111111");
@@ -35,12 +37,20 @@ public class MemberController {
         return "member/login";
     }
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(MemberDTO memberDTO) {
+    public String login(MemberDTO memberDTO, HttpServletRequest request) {
         System.out.println(memberDTO);
         MemberDTO getMemberDTO = memberService.getMember(memberDTO);
         System.out.println(getMemberDTO);
+
+        // 로그인 성공 처리
+        // 세션이 있으면 있는 세션 반환, 없으면 신규 세션 생성
+        HttpSession session = request.getSession();
+        // 세션에 로그인 회원 정보 보관
+        session.setAttribute(LOGIN_MEMBER, memberDTO);
+
         if(getMemberDTO == null){
             System.out.println("2222222222222");
+
             return "redirect:/";
         }else{
             System.out.println("33333333333333333");
@@ -49,5 +59,15 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return "redirect:/";
+    }
 
 }
