@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.BoardDTO;
 import com.example.demo.dto.MemberDTO;
 import com.example.demo.mapper.MemberMapper;
 import lombok.AllArgsConstructor;
@@ -14,11 +13,13 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void joinMember(MemberDTO memberDTO) {
+
         memberMapper.joinMember(memberDTO);
     }
 
     @Override
     public MemberDTO getMember(MemberDTO memberDTO){
+
         return memberMapper.getMember(memberDTO);
     }
 

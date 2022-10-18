@@ -8,7 +8,7 @@
   <a href="${path}/">main</a>
   <a href="${path}/login">로그인</a>
   <a href="${path}/join">회원가입</a>
-  <a href="${path}/write">글쓰기</a>
-  <a href="${path}/boardlist">게시판</a>
+  <a href="${path}/board/write">글쓰기</a>
+  <a href="${path}/board/list">게시판</a>
 </div>
 <hr>
