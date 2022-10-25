@@ -1,18 +1,19 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: hrkim
-  Date: 2022-10-17
-  Time: 오후 4:47
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
     <title>Title</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="container">
 <form role="form" action="/board/modify" method="post">
     <div class="form-group">
         <label>Bno</label>
@@ -38,18 +39,19 @@
 
     <div class="form-group">
         <label>RegDate</label>
-        <input class="form-control" name="regDate" value="<fmt:formatDate pattern = "yyyy/MM/dd" value="${board.regdate}"/>" readonly="readonly">
+        <input class="form-control" name="regDate"
+               value="<fmt:formatDate pattern = "yyyy/MM/dd" value="${board.regdate}"/>" readonly="readonly">
     </div>
 
-    <button type="submit" data-oper="modify" class="btn">Modify</button>
-    <button type="submit" data-oper="remove" class="btn">Remove</button>
-    <button type="submit" data-oper="list" class="btn">List</button>
+    <button class="btn btn-primary" type="submit" data-oper="modify" class="btn">Modify</button>
+    <button class="btn btn-secondary" type="submit" data-oper="remove" class="btn">Remove</button>
+    <button class="btn btn-success" type="submit" data-oper="list" class="btn">List</button>
 
     <input type="hidden" name="pageNum" value="<c:out value="${cri.pageNum}"/>">
     <input type="hidden" name="amount" value="<c:out value="${cri.amount}"/>">
 </form>
 
-
+</div>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -63,7 +65,7 @@
                 formObj.attr("action", "/board/remove");
             } else if (operation === 'list') {
                 //move to list
-                formObj.attr("action","/board/list").attr("method","get");
+                formObj.attr("action", "/board/list").attr("method", "get");
                 var pageNumTag = $("input[name='pageNum']").clone();
                 var amountTag = $("input[name='amount']").clone();
                 formObj.empty();

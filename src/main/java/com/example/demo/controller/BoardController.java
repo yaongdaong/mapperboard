@@ -3,14 +3,18 @@ package com.example.demo.controller;
 import com.example.demo.dto.BoardDTO;
 import com.example.demo.dto.Criteria;
 import com.example.demo.dto.PageDTO;
+import com.example.demo.dto.ReplyDTO;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/board/*")
@@ -20,14 +24,22 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+    @Autowired
+    ReplyService replyService;
+
     @GetMapping("/write")
-    public String write(){
+    public String write(HttpSession session){
+        if(session.getAttribute("member")!=null) {
+
         return "board/write";
+        }else{
+            return "redirect:/login";
+        }
     }
 
     @PostMapping("/write")
     public String write(BoardDTO boardDTO, RedirectAttributes rttr){
-        System.out.println(boardDTO);
+
         boardDTO.setRegdate(new Date());
         boardService.write(boardDTO);
         rttr.addFlashAttribute("result", boardDTO.getBno());
@@ -37,16 +49,31 @@ public class BoardController {
     }
 
 //    @GetMapping("/list")
-//    public void list(Criteria cri, Model model) {
+//    public DTOid list(Criteria cri, Model model) {
 //        model.addAttribute("list",boardService.getBoard(cri));
 //    }
 
-    @GetMapping({"/get","/modify"})
-    public void get(@RequestParam("bno") Long bno,@ModelAttribute("cri")Criteria cri, Model model){
+    @GetMapping({"/get"})
+    public String get(@RequestParam("bno") Long bno, @ModelAttribute("cri")Criteria cri, HttpSession session, Model model){
+
+         BoardDTO boardDTO = boardService.get(bno);
+        model.addAttribute("board", boardDTO);
+
+        List<ReplyDTO> replyDTO = replyService.getList(bno);
+
+        model.addAttribute("replyList", replyDTO);
+
+        return "/board/get";
+
+    }
+    @GetMapping({"/modify"})
+    public String modify(@RequestParam("bno") Long bno, @ModelAttribute("cri")Criteria cri, HttpSession session, Model model){
 
         BoardDTO boardDTO = boardService.get(bno);
 
         model.addAttribute("board", boardDTO);
+        return "/board/modify";
+
     }
 
     @PostMapping("/modify")
@@ -71,15 +98,22 @@ public class BoardController {
     }
 
     @GetMapping("/list")
-    public void list(Criteria cri, Model model){
-        model.addAttribute("list", boardService.getBoard(cri));
+    public String list(Criteria cri, HttpSession session,Model model){
 
-        //model.addAttribute("pageMaker", new PageDTO(cri, 123));
-        System.out.println(cri);
-        int total = boardService.getTotal(cri);
-        System.out.println(total);
-        model.addAttribute("pageMaker", new PageDTO(cri,total));
+        if(session.getAttribute("member")!=null) {
+            model.addAttribute("list", boardService.getBoard(cri));
+
+            //model.addAttribute("pageMaker", new PageDTO(cri, 123));
+
+            int total = boardService.getTotal(cri);
+
+            model.addAttribute("pageMaker", new PageDTO(cri, total));
+            return "/board/list";
+        }else{
+            return "redirect:/login";
+        }
     }
+
 
 
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.ReplyMapper">
+    <insert id="insert">
+        insert into tbl_reply (bno, reply, replyer)
+        values (#{bno}, #{reply}, #{replyer})
+    </insert>
+
+    <select id="read" resultType="com.example.demo.dto.ReplyDTO">
+        select a.rno, a.bno, a.reply, a.replyer, a.replyDate, a.updateDate from tbl_reply as a left join board as b on b.bno = a.bno where b.bno = #{bno};
+    </select>
+
+    <select id="getList" resultType="com.example.demo.dto.ReplyDTO">
+        select a.rno, a.bno, a.reply, a.replyer, a.replyDate, a.updateDate from tbl_reply as a left join board as b on b.bno = a.bno where b.bno = #{bno};
+    </select>
+
+    <delete id="delete">
+        delete
+        from tbl_reply
+        where rno = #{rno}
+    </delete>
+
+    <update id="update">
+        update tbl_reply
+        set reply      = #{reply},
+            updatedate = now()
+        where rno = #{rno}
+    </update>
+
+</mapper>

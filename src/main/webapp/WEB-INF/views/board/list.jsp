@@ -23,7 +23,8 @@
 </head>
 <%@ include file="../include/nav.jsp" %>
 <body>
-<table>
+<div class="container">
+<table class="table table-bordered">
     <thead>
     <tr>
         <th>번호</th>
@@ -46,21 +47,34 @@
 </table>
 
 <%--페이징처리--%>
-<div class="pull-right">
+<nav aria-label="Page navigation example">
     <ul class="pagination">
         <c:if test="${pageMaker.prev}">
-            <li class="paginate_button previous"><a href="${pageMaker.startPage-1}">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="${pageMaker.startPage-1}">Previous</a></li>
         </c:if>
-
         <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
-            <li class="paginate_button ${pageMaker.cri.pageNum == num? "active":""}"><a href="${num}">${num}</a></li>
-        </c:forEach>
-
+            <li class="page-item ${pageMaker.cri.pageNum == num? "active":""}"><a class="page-link" href="${num}">${num}</a></li></c:forEach>
         <c:if test="${pageMaker.next}">
-            <li class="paginate_button next"><a href="${pageMaker.endPage+1}">Next</a></li>
+            <li class="page-item"><a class="page-link" href="${pageMaker.endPage+1}">Next</a></li>
         </c:if>
     </ul>
-</div>
+</nav>
+
+<%--<div class="pull-right">--%>
+<%--    <ul class="pagination">--%>
+<%--        <c:if test="${pageMaker.prev}">--%>
+<%--            <li class="paginate_button previous"><a href="${pageMaker.startPage-1}">Previous</a></li>--%>
+<%--        </c:if>--%>
+
+<%--        <c:forEach var="num" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">--%>
+<%--            <li class="paginate_button ${pageMaker.cri.pageNum == num? "active":""}"><a href="${num}">${num}</a></li>--%>
+<%--        </c:forEach>--%>
+
+<%--        <c:if test="${pageMaker.next}">--%>
+<%--            <li class="paginate_button next"><a href="${pageMaker.endPage+1}">Next</a></li>--%>
+<%--        </c:if>--%>
+<%--    </ul>--%>
+<%--</div>--%>
 
 
 <form id="actionForm" action="/board/list" method="get">
@@ -87,7 +101,7 @@
         </div>
     </div>
 </div>
-
+</div>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -111,17 +125,17 @@
         });
         var actionForm = $("#actionForm");
 
-        $(".move").on("click", function(e){
+        $(".move").on("click", function (e) {
             e.preventDefault();
-            actionForm.append("<input type='hidden' name='bno' value='"+
-                $(this).attr("href")+"'>"
+            actionForm.append("<input type='hidden' name='bno' value='" +
+                $(this).attr("href") + "'>"
             );
-            actionForm.attr("action","/board/get");
+            actionForm.attr("action", "/board/get");
             actionForm.submit();
         })
 
-
-        $(".paginate_button a").on("click", function (e) {
+        $(".page-item a").on("click", function (e) {
+        // $(".paginate_button a").on("click", function (e) {
             e.preventDefault();
             console.log("click");
             actionForm.find("input[name='pageNum']").val($(this).attr("href"));

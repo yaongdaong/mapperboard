@@ -9,8 +9,8 @@ import java.util.List;
 public interface BoardMapper {
 
     // 회원정보 저장
-    void write(BoardDTO boardDTO);
-    void insertSelectKey(BoardDTO boardDTO);
+    public void write(BoardDTO boardDTO);
+    public void insertSelectKey(BoardDTO boardDTO);
 
     public List<BoardDTO> getListWithPaging(Criteria cri);
     public List<BoardDTO> getBoard();

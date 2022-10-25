@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface MemberService {
 
-    void joinMember(MemberDTO memberDTO);
+    public void joinMember(MemberDTO memberDTO);
 
     MemberDTO getMember(MemberDTO memberDTO);
 

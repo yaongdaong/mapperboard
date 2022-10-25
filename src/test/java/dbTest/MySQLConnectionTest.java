@@ -20,7 +20,7 @@ public class MySQLConnectionTest {
         Class.forName(DRIVER);
         try {
             Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println(connection);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

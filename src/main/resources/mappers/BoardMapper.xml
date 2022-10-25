@@ -16,8 +16,8 @@
 
 
     <insert id="write" parameterType="com.example.demo.dto.BoardDTO">
-        insert into board (title, content, regdate)
-        values (#{title}, #{content}, #{regdate})
+        insert into board (title, content, writer, replyDate)
+        values (#{title}, #{content},#{writer}, #{regdate})
     </insert>
 
 
@@ -51,7 +51,7 @@
 
     <select id="getListWithPaging" resultType="com.example.demo.dto.BoardDTO">
         select bno, title, content, writer, regdate
-        from (select @rownum := @rownum + 1 rownumber, bno, title, content, writer, regdate from board)a, (select @rownum := 0) rownum
+        from (select @rownum := @rownum + 1 rownumber, bno, title, content, writer, regdate from board order by bno desc)a, (select @rownum := 0) rownum
         where rownumber > (#{pageNum} - 1) * #{amount} and (#{pageNum} * #{amount}) >= rownumber;
     </select>
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public interface BoardService {
-    void write(BoardDTO boardDTO);
+     public void write(BoardDTO boardDTO);
     public BoardDTO get(Long bno);
   //  BoardDTO getBoard(BoardDTO boardDTO);
 

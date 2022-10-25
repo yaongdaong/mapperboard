@@ -9,6 +9,5 @@
         select *
         from member
         where userid = #{userid}
-          and passwd = #{passwd}
     </select>
 </mapper>
